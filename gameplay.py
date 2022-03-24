@@ -18,6 +18,7 @@ class GameConfigure:
             [(2,0), (1,0), (0,0)],
             [(2,2), (1,1), (0,0)],
         ]
+        self.moves_saving_dir = 'moves.txt'
     def reset_config(self):
         self.map_game = np.zeros((4,4), dtype='int')
         self.is_playing = True

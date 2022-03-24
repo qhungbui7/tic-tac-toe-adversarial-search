@@ -7,3 +7,7 @@ def bot_random_move(game_map, notation):
         y = random.randint(1, 3)
     game_map[y][x] = notation
     return game_map, x, y
+
+
+
+    
