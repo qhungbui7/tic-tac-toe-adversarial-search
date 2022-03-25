@@ -8,10 +8,12 @@ class MovesConfigure:
         self.ordinal_limit = 8
         self.generated_moves = []
         self.generated_labels = []
+        self.limit = []
         self.directions = [
             [(0,2), (0,1), (0,0)],
             [(2,0), (1,0), (0,0)],
             [(2,2), (1,1), (0,0)],
+            [(-2,2), (-1,1), (0,0)],
         ]
 def add_moves(history, config):
     config.generated_moves.append(history.copy())
@@ -20,13 +22,17 @@ def add_moves(history, config):
         x = history[i] % 3
         y = history[i] // 3
         game_map[y][x] = i % 2 + 1
-        # print(game_map)
         if i >= 4:
             check = check_win_both(game_map, config.directions)  
             if check != 0: 
+                # print(game_map)
+                # print(i + 1)
                 config.generated_labels.append(check)
+                config.limit.append(i + 1) # number of moves requires to win
                 return 
     config.generated_labels.append(0)
+    config.limit.append(9)
+
         
 
     
@@ -59,6 +65,18 @@ def brute_force(num, history, is_visisted, move_config):
             history.pop(len(history) - 1)
             is_visisted[y][x] = False
 
+
+def generate_moves_with_labels():
+    move_config = MovesConfigure()
+    is_visisted = np.full((3,3), False)
+    history = []
+    brute_force(0, history, is_visisted, move_config)
+    move_config.generated_moves = np.array(move_config.generated_moves)
+    move_config.generated_labels = np.array(move_config.generated_labels)
+    move_config.limit = np.array(move_config.limit)
+
+    return move_config.generated_moves, move_config.generated_labels, move_config.limit
+
 if __name__ == '__main__':
     move_config = MovesConfigure()
     is_visisted = np.full((3,3), False)
@@ -66,22 +84,24 @@ if __name__ == '__main__':
     brute_force(0, history, is_visisted, move_config)
     print(move_config.generated_moves[len(move_config.generated_moves) - 1])
     print(move_config.generated_labels[len(move_config.generated_labels) - 1])
+    print(move_config.limit[len(move_config.limit) - 1])
+    print(len(move_config.generated_moves), len(move_config.generated_labels), len(move_config.limit))
 
 
-    # history = move_config.generated_moves[999]
-    # print(move_config.generated_labels[999])
+    history = move_config.generated_moves[len(move_config.generated_moves) - 1]
+    print(move_config.generated_labels[len(move_config.generated_moves) - 1])
 
-    # game_map = np.zeros((3,3))
-    # for i in range(0, 9):
-    #     x = history[i] % 3
-    #     y = history[i] // 3
-    #     game_map[y][x] = i % 2 + 1
-    #     print(game_map)
-    #     if i >= 4:
-    #         check = check_win_both(game_map, move_config.directions)  
-    #         if check != 0:
-    #             print(check) 
-    #             break
-                
+    game_map = np.zeros((3,3))
+    for i in range(0, 9):
+        x = history[i] % 3
+        y = history[i] // 3
+        game_map[y][x] = i % 2 + 1
+        print(game_map)
+        if i >= 4:
+            check = check_win_both(game_map, move_config.directions)  
+            if check != 0:
+                print(check) 
+                break
+
     
     

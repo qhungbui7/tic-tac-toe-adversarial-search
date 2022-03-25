@@ -17,6 +17,7 @@ class GameConfigure:
             [(0,2), (0,1), (0,0)],
             [(2,0), (1,0), (0,0)],
             [(2,2), (1,1), (0,0)],
+            [(-2,2), (-1,1), (0,0)],
         ]
         self.moves_saving_dir = 'moves.txt'
     def reset_config(self):

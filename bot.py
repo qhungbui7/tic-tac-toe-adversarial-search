@@ -9,5 +9,8 @@ def bot_random_move(game_map, notation):
     return game_map, x, y
 
 
+def bot_strategy():
+    pass
+
 
     
