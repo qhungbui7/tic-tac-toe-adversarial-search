@@ -1,7 +1,7 @@
-from gameplay import GameConfigure
 import numpy as np
 from tqdm import tqdm
 from joblib import Parallel, delayed
+
 
 class MovesConfigure:
     def __init__(self):
@@ -15,6 +15,8 @@ class MovesConfigure:
             [(2,2), (1,1), (0,0)],
             [(-2,2), (-1,1), (0,0)],
         ]
+
+
 def add_moves(history, config):
     config.generated_moves.append(history.copy())
     game_map = np.zeros((3,3))
@@ -25,8 +27,6 @@ def add_moves(history, config):
         if i >= 4:
             check = check_win_both(game_map, config.directions)  
             if check != 0: 
-                # print(game_map)
-                # print(i + 1)
                 config.generated_labels.append(check)
                 config.limit.append(i + 1) # number of moves requires to win
                 return 
@@ -34,8 +34,6 @@ def add_moves(history, config):
     config.limit.append(9)
 
         
-
-    
 def check_win_both(game_map, directions):
     for notation in range(1, 3):
         for i in range(0, 3): # height 
@@ -50,6 +48,7 @@ def check_win_both(game_map, directions):
                         if check:
                             return notation
     return 0 # draw
+
 
 def brute_force(num, history, is_visisted, move_config):
     for i in range(0, 9):
@@ -77,6 +76,7 @@ def generate_moves_with_labels():
 
     return move_config.generated_moves, move_config.generated_labels, move_config.limit
 
+
 if __name__ == '__main__':
     move_config = MovesConfigure()
     is_visisted = np.full((3,3), False)
@@ -88,20 +88,20 @@ if __name__ == '__main__':
     print(len(move_config.generated_moves), len(move_config.generated_labels), len(move_config.limit))
 
 
-    history = move_config.generated_moves[len(move_config.generated_moves) - 1]
-    print(move_config.generated_labels[len(move_config.generated_moves) - 1])
+    # history = move_config.generated_moves[len(move_config.generated_moves) - 1]
+    # print(move_config.generated_labels[len(move_config.generated_moves) - 1])
 
-    game_map = np.zeros((3,3))
-    for i in range(0, 9):
-        x = history[i] % 3
-        y = history[i] // 3
-        game_map[y][x] = i % 2 + 1
-        print(game_map)
-        if i >= 4:
-            check = check_win_both(game_map, move_config.directions)  
-            if check != 0:
-                print(check) 
-                break
+    # game_map = np.zeros((3,3))
+    # for i in range(0, 9):
+    #     x = history[i] % 3
+    #     y = history[i] // 3
+    #     game_map[y][x] = i % 2 + 1
+    #     print(game_map)
+    #     if i >= 4:
+    #         check = check_win_both(game_map, move_config.directions)  
+    #         if check != 0:
+    #             print(check) 
+    #             break
 
     
     
