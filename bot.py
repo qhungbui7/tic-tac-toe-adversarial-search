@@ -39,7 +39,14 @@ def bot_strategy(notation, config):
                 
                 
                 # need to eliminate that is the same within the limit
-                print('Move ', sing)
+                # exp = 5
+                # print('Move ', sing)
+                # print(min(temp_gen_lim[temp_gen_labels == 2] - config.count_moves + config.epsilon)**5) # error in the count_moves
+                # truth = (temp_gen_lim - config.count_moves == 0) & (temp_gen_labels == 2)
+                # print(temp_gen_moves[truth])
+                # print(temp_gen_lim[truth])
+                # print(temp_gen_labels[truth])
+                # print(temp_gen_moves[((temp_gen_lim - config.count_moves == 0) & (temp_gen_labels == 2)).all()])
                 print((3 * np.sum(1 / (temp_gen_lim[temp_gen_labels == 2] - config.count_moves + config.epsilon)**5)))
                 print((1 * np.sum(1 / (temp_gen_lim[temp_gen_labels == 0] - config.count_moves + config.epsilon)**5)))
                 print((4 * (np.sum(1 / (temp_gen_lim[temp_gen_labels == 1] - config.count_moves + config.epsilon)**5) - 1)))
@@ -47,13 +54,16 @@ def bot_strategy(notation, config):
                 loss_function = -(3 * np.sum(1 / (temp_gen_lim[temp_gen_labels == 2] - config.count_moves + config.epsilon)**5) + \
                 1 * np.sum(1 / (temp_gen_lim[temp_gen_labels == 0] - config.count_moves + config.epsilon)**5)  + \
                 -4 * (np.sum(1 / (temp_gen_lim[temp_gen_labels == 1] - config.count_moves + config.epsilon)**5) - 1))
-                
+
+                print(loss_function)        
 
                 temp_history = np.delete(temporary_history, len(temporary_history) - 1)
 
                 if loss_function < minimum_loss:
                     minimum_loss = loss_function
                     argminX, argminY = j, i
+    print('Best loss: ', minimum_loss)
+    print(argminX, argminY)
     config.map_game[argminY][argminX] = notation
 
     config.history = np.append(config.history, convert_to_singular(argminX, argminY))

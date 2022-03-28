@@ -31,6 +31,7 @@ class GameConfigure:
         self.limit = self.limit[self.generated_moves[:, self.count_moves - 1] == sing].copy()
         self.generated_labels = self.generated_labels[self.generated_moves[:, self.count_moves - 1] == sing].copy()
         self.generated_moves = self.generated_moves[self.generated_moves[:, self.count_moves - 1] == sing].copy()
+
     
 
 def move_and_check_valid(x, y, game_map, notation):

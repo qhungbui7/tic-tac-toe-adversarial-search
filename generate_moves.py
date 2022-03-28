@@ -1,6 +1,4 @@
 import numpy as np
-from tqdm import tqdm
-from joblib import Parallel, delayed
 from utils import *
 
 
@@ -24,7 +22,7 @@ def add_moves(history, config):
     for i in range(0, 9):
         x = history[i] % 3
         y = history[i] // 3
-        game_map[y][x] = i % 2 + 1
+        game_map[y][x] = i % 2 + 1 # 1 is player, 2 is bot
         if i >= 4:
             check = check_win_both(game_map, config.directions)  
             if check != 0: 
@@ -43,7 +41,7 @@ def check_win_both(game_map, directions):
                     for direction in directions:
                         check = True
                         for adds_x, adds_y in direction:
-                            if i + adds_y > 2 or j + adds_x > 2 or game_map[i + adds_y][j + adds_x] != notation:
+                            if i + adds_y < 0 or j + adds_x < 0 or i + adds_y > 2 or j + adds_x > 2 or game_map[i + adds_y][j + adds_x] != notation:
                                 check = False
                                 break
                         if check:
