@@ -25,7 +25,6 @@ class GameConfigure:
         self.limit = None
     def update_generated_by_history(self):
         sing = self.history[len(self.history) - 1]
-
         self.limit = self.limit[self.generated_moves[:, self.count_moves - 1] == sing].copy()
         self.generated_labels = self.generated_labels[self.generated_moves[:, self.count_moves - 1] == sing].copy()
         self.generated_moves = self.generated_moves[self.generated_moves[:, self.count_moves - 1] == sing].copy()
@@ -60,10 +59,14 @@ def check_win(game_map, notation, directions):
 def play_game():
     print('Initializing the game...')
     config = GameConfigure()
-    config.generated_moves, config.generated_labels, config.limit = initialize_strategy()
+    # config.generated_moves, config.generated_labels, config.limit = initialize_strategy()
+    config.generated_moves = np.loadtxt('moves.txt').astype('int')
+    config.generated_labels = np.loadtxt('labels.txt').astype('int')
+    config.limit = np.loadtxt('limit.txt').astype('int') 
     print(len(config.generated_moves))
     print(len(config.generated_labels))
     print(len(config.limit))
+    print(config.limit)
     print('Initialization done !')
     console_displaying(config.map_game)
 
@@ -95,14 +98,14 @@ def play_game():
             return
 
         
-        config.count_moves += 1
+        
         print('Bot\'s turn')
 
         
 
         # config.map_game, x, y = bot_random_move(config.map_game, BOT_NOTATION)
         x, y = bot_strategy(BOT_NOTATION, config)
-
+        config.count_moves += 1
         print ('Bot makes a move to (x, y) : ({}, {})'.format(x, y))
         console_displaying(config.map_game)
 

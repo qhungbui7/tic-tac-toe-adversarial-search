@@ -44,13 +44,18 @@ def bot_strategy(notation, config):
                 # print(len(temp_gen_lim[temp_gen_labels == 2]))
 
 
-                # print(3 * (np.sum(1 / (temp_gen_lim[temp_gen_labels == 2] - config.count_moves)**15)))
-                # print(2 * (np.sum(1 / (temp_gen_lim[temp_gen_labels == 0] - config.count_moves)**15)))
-                # print(-4 * (np.sum(1 / (temp_gen_lim[temp_gen_labels == 1] - config.count_moves)**15)))
 
-                loss_function = -(3 * (np.sum(1 / (temp_gen_lim[temp_gen_labels == 2] - config.count_moves)**5) + \
-                1 * (np.sum(1 / (temp_gen_lim[temp_gen_labels == 0] - config.count_moves)**5) )) + \
-                -4 * (np.sum(1 / (temp_gen_lim[temp_gen_labels == 1] - config.count_moves + 1)**5)))
+                # 3 * (np.sum(1 / (temp_gen_lim[temp_gen_labels == 2] - config.count_moves)**5)
+                # 1 * (np.sum(1 / (temp_gen_lim[temp_gen_labels == 0] - config.count_moves)**5) )
+                # -4 * (np.sum(1 / (temp_gen_lim[temp_gen_labels == 1] - config.count_moves)**5) - 1)
+
+                
+                # need to eliminate that is the same within the limit
+
+
+                loss_function = -(3 * np.sum(1 / (temp_gen_lim[temp_gen_labels == 2] - config.count_moves)**5) + \
+                1 * np.sum(1 / (temp_gen_lim[temp_gen_labels == 0] - config.count_moves)**5)  + \
+                -4 * (np.sum(1 / (temp_gen_lim[temp_gen_labels == 1] - config.count_moves)**5) - 1))
                 
                 # print(loss_function)
                 # print('=== {} == '.format(sing))

@@ -1,6 +1,7 @@
 import numpy as np
 from tqdm import tqdm
 from joblib import Parallel, delayed
+from utils import *
 
 
 class MovesConfigure:
@@ -65,6 +66,7 @@ def brute_force(num, history, is_visisted, move_config):
             is_visisted[y][x] = False
 
 
+
 def generate_moves_with_labels():
     move_config = MovesConfigure()
     is_visisted = np.full((3,3), False)
@@ -74,6 +76,21 @@ def generate_moves_with_labels():
     move_config.generated_labels = np.array(move_config.generated_labels)
     move_config.limit = np.array(move_config.limit)
 
+    set_moves = set([])
+    tf = np.ones((len(move_config.limit)))
+
+    for i in range(0, len(move_config.generated_moves)):
+        concatenated_string = concatenate_nparr_string(move_config.generated_moves[0:move_config.limit[i] - 1])
+        if concatenated_string in set_moves:
+            tf[i] = 0
+        else:
+            set_moves.add(concatenated_string)    
+    
+    move_config.generated_moves = move_config.generated_moves[tf == 1]
+    move_config.generated_labels = move_config.generated_labels[tf == 1]
+    move_config.limit = move_config.limit[tf == 1]
+
+
     return move_config.generated_moves, move_config.generated_labels, move_config.limit
 
 
@@ -82,26 +99,26 @@ if __name__ == '__main__':
     is_visisted = np.full((3,3), False)
     history = []
     brute_force(0, history, is_visisted, move_config)
-    print(move_config.generated_moves[len(move_config.generated_moves) - 1])
-    print(move_config.generated_labels[len(move_config.generated_labels) - 1])
-    print(move_config.limit[len(move_config.limit) - 1])
-    print(len(move_config.generated_moves), len(move_config.generated_labels), len(move_config.limit))
+    move_config.generated_moves = np.array(move_config.generated_moves).astype('int')
+    move_config.generated_labels = np.array(move_config.generated_labels).astype('int')
+    move_config.limit = np.array(move_config.limit).astype('int')
 
+    # set_moves = set([])
+    # tf = np.ones((len(move_config.limit)))
 
-    # history = move_config.generated_moves[len(move_config.generated_moves) - 1]
-    # print(move_config.generated_labels[len(move_config.generated_moves) - 1])
-
-    # game_map = np.zeros((3,3))
-    # for i in range(0, 9):
-    #     x = history[i] % 3
-    #     y = history[i] // 3
-    #     game_map[y][x] = i % 2 + 1
-    #     print(game_map)
-    #     if i >= 4:
-    #         check = check_win_both(game_map, move_config.directions)  
-    #         if check != 0:
-    #             print(check) 
-    #             break
-
+    # for i in range(0, len(move_config.generated_moves)):
+    #     concatenated_string = concatenate_nparr_string(move_config.generated_moves[0:move_config.limit[i] - 1])
+    #     if concatenated_string in set_moves:
+    #         tf[i] = 0
+    #     else:
+    #         set_moves.add(concatenated_string)    
     
+    # move_config.generated_moves = move_config.generated_moves[tf == 1]
+    # move_config.generated_labels = move_config.generated_labels[tf == 1]
+    # move_config.limit = move_config.limit[tf == 1]
+    print(move_config.limit)
+    np.savetxt('moves.txt', move_config.generated_moves)
+    np.savetxt('labels.txt', move_config.generated_labels)
+    np.savetxt('limit.txt', move_config.limit)
+
     
