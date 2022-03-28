@@ -80,7 +80,7 @@ def generate_moves_with_labels():
     tf = np.ones((len(move_config.limit)))
 
     for i in range(0, len(move_config.generated_moves)):
-        concatenated_string = concatenate_nparr_string(move_config.generated_moves[0:move_config.limit[i] - 1])
+        concatenated_string = concatenate_nparr_string(move_config.generated_moves[0: (move_config.limit[i] - 1)])
         if concatenated_string in set_moves:
             tf[i] = 0
         else:
@@ -103,20 +103,21 @@ if __name__ == '__main__':
     move_config.generated_labels = np.array(move_config.generated_labels).astype('int')
     move_config.limit = np.array(move_config.limit).astype('int')
 
-    # set_moves = set([])
-    # tf = np.ones((len(move_config.limit)))
+    set_moves = set([])
+    tf = np.ones((len(move_config.limit)))
 
-    # for i in range(0, len(move_config.generated_moves)):
-    #     concatenated_string = concatenate_nparr_string(move_config.generated_moves[0:move_config.limit[i] - 1])
-    #     if concatenated_string in set_moves:
-    #         tf[i] = 0
-    #     else:
-    #         set_moves.add(concatenated_string)    
+    for i in range(0, len(move_config.generated_moves)):
+        concatenated_string = concatenate_nparr_string(move_config.generated_moves[i, 0 : move_config.limit[i] - 1])
+        if concatenated_string in set_moves:
+            tf[i] = 0
+        else:
+            set_moves.add(concatenated_string)    
     
-    # move_config.generated_moves = move_config.generated_moves[tf == 1]
-    # move_config.generated_labels = move_config.generated_labels[tf == 1]
-    # move_config.limit = move_config.limit[tf == 1]
-    print(move_config.limit)
+
+    move_config.generated_moves = move_config.generated_moves[tf == 1]
+    move_config.generated_labels = move_config.generated_labels[tf == 1]
+    move_config.limit = move_config.limit[tf == 1]
+
     np.savetxt('moves.txt', move_config.generated_moves)
     np.savetxt('labels.txt', move_config.generated_labels)
     np.savetxt('limit.txt', move_config.limit)
