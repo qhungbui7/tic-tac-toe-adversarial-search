@@ -26,6 +26,7 @@ class GameConfigure:
         self.generated_moves = None
         self.generated_labels = None
         self.limit = None
+
     def update_generated_by_history(self):
         sing = self.history[len(self.history) - 1]
         self.limit = self.limit[self.generated_moves[:, self.count_moves - 1] == sing].copy()
@@ -82,36 +83,35 @@ def play_game():
 
     print('Initialization done !')
     # console_displaying(config.map_game)
-    draw_figures(screen, config.map_game)
+    draw_figures(screen, config.map_game) # initially display
     pygame.display.update()
     while True: 
         for event in pygame.event.get(): 
             if event.type == pygame.QUIT:
-                    sys.exit()    
+                sys.exit()    
             if event.type == pygame.MOUSEBUTTONDOWN and config.is_playing: 
                 print('Your\'s turn')
-                while True:
-                    mouseX = event.pos[0] # x
-                    mouseY = event.pos[1] # y
+                # while True:
+                mouseX = event.pos[0] # x
+                mouseY = event.pos[1] # y
 
-                    x = int(mouseX // SQUARE_SIZE)
-                    y = int(mouseY // SQUARE_SIZE)
+                x = int(mouseX // SQUARE_SIZE)
+                y = int(mouseY // SQUARE_SIZE)
 
-                    # x = int(input('Enter the X coordinate (0-2): '))
-                    # y = int(input('Enter the Y coordinate (0-2): '))
-                    
-                    is_valid_move, temporary_map = move_and_check_valid(x, y, config.map_game, PLAYER_NOTATION)
-                    if is_valid_move:
-                        config.count_moves += 1
-                        config.history = np.append(config.history, convert_to_singular(x, y))
-                        config.update_generated_by_history()
-                        config.map_game = temporary_map
-                        # console_displaying(config.map_game)
-                        draw_figures(screen, config.map_game)
-                        pygame.display.update()
-                        break
-                    else: 
-                        print('Invalid move, please re-input the coordinate!')
+                
+                is_valid_move, temporary_map = move_and_check_valid(x, y, config.map_game, PLAYER_NOTATION)
+                if is_valid_move:
+                    config.count_moves += 1
+                    config.history = np.append(config.history, convert_to_singular(x, y))
+                    config.update_generated_by_history()
+                    config.map_game = temporary_map
+                    # console_displaying(config.map_game)
+                    draw_figures(screen, config.map_game)
+                    pygame.display.update()
+                    # break
+                else: 
+                    print('Invalid move, please re-input the coordinate!')
+                    continue
                         
 
                 if check_win(config.map_game, PLAYER_NOTATION, config.check_win_range):

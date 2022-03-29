@@ -1,4 +1,5 @@
-import pygame, sys
+import pygame
+import sys
 import numpy as np
 
 # Source code of Graphic User Interface of this application
@@ -33,9 +34,6 @@ def console_displaying(map):
         for i in range(3):
             print(map[j][i], end=' ')
         print('')
-
-
-
 
 
 def draw_lines(screen):
