@@ -1,14 +1,11 @@
-# MODULES
-# references from this repo: https://github.com/AlejoG10/python-tictactoe-yt
+# mainly references from this repo: https://github.com/AlejoG10/python-tictactoe-yt
 import pygame, sys
 import numpy as np
 
-# initializes pygame
 pygame.init()
 
-# ---------
-# CONSTANTS
-# ---------
+# constant declaration
+
 WIDTH = 600
 HEIGHT = 600
 LINE_WIDTH = 15
@@ -20,45 +17,37 @@ CIRCLE_RADIUS = 60
 CIRCLE_WIDTH = 15
 CROSS_WIDTH = 25
 SPACE = 55
-# rgb: red green blue
+
 RED = (255, 0, 0)
-BG_COLOR = (28, 170, 156)
-LINE_COLOR = (23, 145, 135)
+BG_COLOR = (100, 156, 253) # (28, 170, 156)
+LINE_COLOR =  (62, 92, 220) # (100, 156, 199)
 CIRCLE_COLOR = (239, 231, 200)
 CROSS_COLOR = (66, 66, 66)
 
-# ------
-# SCREEN
-# ------
-screen = pygame.display.set_mode( (WIDTH, HEIGHT) )
-pygame.display.set_caption( 'TIC TAC TOE' )
-screen.fill( BG_COLOR )
+# setting config
+# source of the image: https://www.flaticon.com/free-icon/tic-tac-toe_1021366
+img = pygame.image.load('tic-tac-toe.png')
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
-# -------------
-# CONSOLE BOARD
-# -------------
-board = np.zeros( (BOARD_ROWS, BOARD_COLS) )
+pygame.display.set_icon(img)
+pygame.display.set_caption('Tic Tac Toe versus Jame the unbeatable bot')
+screen.fill(BG_COLOR)
 
-# ---------
-# FUNCTIONS
-# ---------
+board = np.zeros((BOARD_ROWS, BOARD_COLS))
+
 def draw_lines():
-	# 1 horizontal
-	pygame.draw.line( screen, LINE_COLOR, (0, SQUARE_SIZE), (WIDTH, SQUARE_SIZE), LINE_WIDTH )
-	# 2 horizontal
-	pygame.draw.line( screen, LINE_COLOR, (0, 2 * SQUARE_SIZE), (WIDTH, 2 * SQUARE_SIZE), LINE_WIDTH )
+	pygame.draw.line(screen, LINE_COLOR, (0, SQUARE_SIZE), (WIDTH, SQUARE_SIZE), LINE_WIDTH)
+	pygame.draw.line(screen, LINE_COLOR, (0, 2 * SQUARE_SIZE), (WIDTH, 2 * SQUARE_SIZE), LINE_WIDTH)
 
-	# 1 vertical
-	pygame.draw.line( screen, LINE_COLOR, (SQUARE_SIZE, 0), (SQUARE_SIZE, HEIGHT), LINE_WIDTH )
-	# 2 vertical
-	pygame.draw.line( screen, LINE_COLOR, (2 * SQUARE_SIZE, 0), (2 * SQUARE_SIZE, HEIGHT), LINE_WIDTH )
+	pygame.draw.line(screen, LINE_COLOR, (SQUARE_SIZE, 0), (SQUARE_SIZE, HEIGHT), LINE_WIDTH)
+	pygame.draw.line(screen, LINE_COLOR, (2 * SQUARE_SIZE, 0), (2 * SQUARE_SIZE, HEIGHT), LINE_WIDTH)
 
 def draw_figures():
 	for row in range(BOARD_ROWS):
 		for col in range(BOARD_COLS):
-			if board[row][col] == 1:
-				pygame.draw.circle( screen, CIRCLE_COLOR, (int( col * SQUARE_SIZE + SQUARE_SIZE//2 ), int( row * SQUARE_SIZE + SQUARE_SIZE//2 )), CIRCLE_RADIUS, CIRCLE_WIDTH )
-			elif board[row][col] == 2:
+			if board[row][col] == 1: # draw circle
+				pygame.draw.circle( screen, CIRCLE_COLOR, (int(col * SQUARE_SIZE + SQUARE_SIZE//2 ), int( row * SQUARE_SIZE + SQUARE_SIZE//2)), CIRCLE_RADIUS, CIRCLE_WIDTH )
+			elif board[row][col] == 2: # draw cross
 				pygame.draw.line( screen, CROSS_COLOR, (col * SQUARE_SIZE + SPACE, row * SQUARE_SIZE + SQUARE_SIZE - SPACE), (col * SQUARE_SIZE + SQUARE_SIZE - SPACE, row * SQUARE_SIZE + SPACE), CROSS_WIDTH )	
 				pygame.draw.line( screen, CROSS_COLOR, (col * SQUARE_SIZE + SPACE, row * SQUARE_SIZE + SPACE), (col * SQUARE_SIZE + SQUARE_SIZE - SPACE, row * SQUARE_SIZE + SQUARE_SIZE - SPACE), CROSS_WIDTH )
 
@@ -137,19 +126,16 @@ def draw_desc_diagonal(player):
 
 	pygame.draw.line( screen, color, (15, 15), (WIDTH - 15, HEIGHT - 15), WIN_LINE_WIDTH )
 
-def restart():
-	screen.fill( BG_COLOR )
-	draw_lines()
-	for row in range(BOARD_ROWS):
-		for col in range(BOARD_COLS):
-			board[row][col] = 0
+# def restart():
+# 	screen.fill( BG_COLOR )
+# 	draw_lines()
+# 	for row in range(BOARD_ROWS):
+# 		for col in range(BOARD_COLS):
+# 			board[row][col] = 0
 
 draw_lines()
 
-# ---------
-# VARIABLES
-# ---------
-player = 1
+player = 1 # player have notation 1
 game_over = False
 
 # --------
@@ -177,10 +163,10 @@ while True:
 
 				draw_figures()
 
-		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_r:
-				restart()
-				player = 1
-				game_over = False
+		# if event.type == pygame.KEYDOWN:
+		# 	if event.key == pygame.K_r: # press R to replay
+		# 		restart()
+		# 		player = 1
+		# 		game_over = False
 
 	pygame.display.update()
