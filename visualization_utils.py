@@ -9,7 +9,8 @@ import numpy as np
 
 
 # constant declaration
-
+BR_TEXT_COLOR = (62, 117, 224)
+TEXT_COLOR = (152, 149, 133)
 WIDTH = 600
 HEIGHT = 600
 LINE_WIDTH = 15
@@ -22,7 +23,6 @@ CIRCLE_WIDTH = 15
 CROSS_WIDTH = 25
 SPACE = 55
 
-RED = (255, 0, 0)
 BG_COLOR = (100, 156, 253) # (28, 170, 156)
 LINE_COLOR =  (62, 92, 220) # (100, 156, 199)
 CIRCLE_COLOR = (239, 231, 200)

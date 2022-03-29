@@ -62,6 +62,9 @@ def check_win(game_map, notation, directions):
 
 
 def play_game():
+
+    
+
     pygame.init()
     print('Initializing the game...')
     config = GameConfigure()
@@ -73,6 +76,21 @@ def play_game():
 
     img = pygame.image.load('tic-tac-toe.png')
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+    font = pygame.font.Font('freesansbold.ttf', 50)
+    
+    text_win = font.render('You win !', True, CIRCLE_COLOR, BR_TEXT_COLOR)
+    text_lose = font.render('You lose !', True, CROSS_COLOR, BR_TEXT_COLOR)
+    text_draw = font.render('Draw !', True, TEXT_COLOR, BR_TEXT_COLOR)
+    
+    textRect_win = text_win.get_rect()
+    textRect_win.center = (300, 300)
+
+    textRect_lose = text_lose.get_rect()
+    textRect_lose.center = (300, 290)
+
+    textRect_draw = text_draw.get_rect()
+    textRect_draw.center = (300, 300)
 
     pygame.display.set_icon(img)
     pygame.display.set_caption('Tic Tac Toe versus James - the unbeatable bot')
@@ -117,10 +135,14 @@ def play_game():
                 if check_win(config.map_game, PLAYER_NOTATION, config.check_win_range):
                     print('You win!')
                     config.is_playing = False
+                    screen.blit(text_win, textRect_win)
+                    pygame.display.update()
                     break
                 if config.count_moves == 9:
                     print('Draw !')
                     config.is_playing = False
+                    screen.blit(text_draw, textRect_draw)
+                    pygame.display.update()
                     break
 
                 
@@ -137,6 +159,8 @@ def play_game():
                 if check_win(config.map_game, BOT_NOTATION, config.check_win_range):
                     print('Bot win!')
                     config.is_playing = False
+                    screen.blit(text_lose, textRect_lose)
+                    pygame.display.update()
                     break
                     
     
