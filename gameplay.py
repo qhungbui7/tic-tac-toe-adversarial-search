@@ -61,6 +61,7 @@ def check_win(game_map, notation, directions):
 
 
 def play_game():
+    pygame.init()
     print('Initializing the game...')
     config = GameConfigure()
     # config.generated_moves, config.generated_labels, config.limit = initialize_strategy()
@@ -68,54 +69,76 @@ def play_game():
     config.generated_labels = np.loadtxt('labels.txt').astype('int')
     config.limit = np.loadtxt('limit.txt').astype('int') 
     
-    # print(len(config.generated_moves))
-    # print(len(config.generated_labels))
-    # print(len(config.limit))
+
+    img = pygame.image.load('tic-tac-toe.png')
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+
+    pygame.display.set_icon(img)
+    pygame.display.set_caption('Tic Tac Toe versus James - the unbeatable bot')
+    screen.fill(BG_COLOR)
+
+    board = np.zeros((BOARD_ROWS, BOARD_COLS)) # config
+    draw_lines(screen)
 
     print('Initialization done !')
-    console_displaying(config.map_game)
+    # console_displaying(config.map_game)
+    draw_figures(screen, config.map_game)
+    pygame.display.update()
+    while True: 
+        for event in pygame.event.get(): 
+            if event.type == pygame.QUIT:
+                    sys.exit()    
+            if event.type == pygame.MOUSEBUTTONDOWN and config.is_playing: 
+                print('Your\'s turn')
+                while True:
+                    mouseX = event.pos[0] # x
+                    mouseY = event.pos[1] # y
 
-    while config.is_playing == True: 
-        config.count_moves += 1
-        print('Your\'s turn')
-        while True:
-            x = int(input('Enter the X coordinate (0-2): '))
-            y = int(input('Enter the Y coordinate (0-2): '))
-            
-            is_valid_move, temporary_map = move_and_check_valid(x, y, config.map_game, PLAYER_NOTATION)
-            if is_valid_move:
-                config.history = np.append(config.history, convert_to_singular(x, y))
-                config.update_generated_by_history()
-                config.map_game = temporary_map
-                console_displaying(config.map_game)
-                break
-            else: 
-                print('Invalid move, please re-input the coordinate!')
+                    x = int(mouseX // SQUARE_SIZE)
+                    y = int(mouseY // SQUARE_SIZE)
+
+                    # x = int(input('Enter the X coordinate (0-2): '))
+                    # y = int(input('Enter the Y coordinate (0-2): '))
+                    
+                    is_valid_move, temporary_map = move_and_check_valid(x, y, config.map_game, PLAYER_NOTATION)
+                    if is_valid_move:
+                        config.count_moves += 1
+                        config.history = np.append(config.history, convert_to_singular(x, y))
+                        config.update_generated_by_history()
+                        config.map_game = temporary_map
+                        # console_displaying(config.map_game)
+                        draw_figures(screen, config.map_game)
+                        pygame.display.update()
+                        break
+                    else: 
+                        print('Invalid move, please re-input the coordinate!')
+                        
+
+                if check_win(config.map_game, PLAYER_NOTATION, config.check_win_range):
+                    print('You win!')
+                    config.is_playing = False
+                    break
+                if config.count_moves == 9:
+                    print('Draw !')
+                    config.is_playing = False
+                    break
+
+                
+                
+                print('Bot\'s turn')
+
                 
 
-        if check_win(config.map_game, PLAYER_NOTATION, config.check_win_range):
-            print('You win!')
-            config.is_playing = False
-            return
-        if config.count_moves == 9:
-            print('Draw !')
-            return
-
-        
-        
-        print('Bot\'s turn')
-
-        
-
-        # config.map_game, x, y = bot_random_move(config.map_game, BOT_NOTATION)
-        x, y = bot_strategy(BOT_NOTATION, config)
-        print ('Bot makes a move to (x, y) : ({}, {})'.format(x, y))
-        console_displaying(config.map_game)
-
-
-        if check_win(config.map_game, BOT_NOTATION, config.check_win_range):
-            print('Bot win!')
-            config.is_playing = False
-            return
-        
+                # config.map_game, x, y = bot_random_move(config.map_game, BOT_NOTATION)
+                x, y = bot_strategy(BOT_NOTATION, config)
+                print ('Bot makes a move to (x, y) : ({}, {})'.format(x, y))
+                draw_figures(screen, config.map_game)
+                pygame.display.update()
+                if check_win(config.map_game, BOT_NOTATION, config.check_win_range):
+                    print('Bot win!')
+                    config.is_playing = False
+                    break
+                    
+    
+                
         
