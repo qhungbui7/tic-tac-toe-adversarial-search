@@ -18,9 +18,8 @@ def bot_random_move(game_map, notation):
     return game_map, x, y
 
 
-def bot_strategy(notation, config):
+def bot_strategy(notation, config, bot_first=False):
 
-    temporary_history = config.history.copy()
     argminX, argminY = 0, 0
     argmin_moves = None
     minimum_loss = float('inf')
@@ -32,32 +31,24 @@ def bot_strategy(notation, config):
             sing = convert_to_singular(j, i) # x is j, y is i
             if config.map_game[i][j] == 0: 
                 
-                temp_history = np.append(temporary_history, sing)
                 temp_gen_moves = config.generated_moves[config.generated_moves[:, config.count_moves - 1] == sing]
                 temp_gen_labels = config.generated_labels[config.generated_moves[:, config.count_moves - 1] == sing]
                 temp_gen_lim = config.limit[config.generated_moves[:, config.count_moves - 1] == sing]
                 
                 
-                # need to eliminate that is the same within the limit
-                # exp = 5
-                # print('Move ', sing)
-                # print(min(temp_gen_lim[temp_gen_labels == 2] - config.count_moves + config.epsilon)**5) # error in the count_moves
-                # truth = (temp_gen_lim - config.count_moves == 0) & (temp_gen_labels == 2)
-                # print(temp_gen_moves[truth])
-                # print(temp_gen_lim[truth])
-                # print(temp_gen_labels[truth])
-                # print(temp_gen_moves[((temp_gen_lim - config.count_moves == 0) & (temp_gen_labels == 2)).all()])
-                print((3 * np.sum(1 / (temp_gen_lim[temp_gen_labels == 2] - config.count_moves + config.epsilon)**5)))
-                print((1 * np.sum(1 / (temp_gen_lim[temp_gen_labels == 0] - config.count_moves + config.epsilon)**5)))
-                print((4 * (np.sum(1 / (temp_gen_lim[temp_gen_labels == 1] - config.count_moves + config.epsilon)**5) - 1)))
+                # print((3 * np.sum(1 / (temp_gen_lim[temp_gen_labels == 2] - config.count_moves + config.epsilon)**5)))
+                # print((1 * np.sum(1 / (temp_gen_lim[temp_gen_labels == 0] - config.count_moves + config.epsilon)**5)))
+                # print((4 * (np.sum(1 / (temp_gen_lim[temp_gen_labels == 1] - config.count_moves + config.epsilon)**5))))
 
                 loss_function = -(3 * np.sum(1 / (temp_gen_lim[temp_gen_labels == 2] - config.count_moves + config.epsilon)**5) + \
                 1 * np.sum(1 / (temp_gen_lim[temp_gen_labels == 0] - config.count_moves + config.epsilon)**5)  + \
-                -4 * (np.sum(1 / (temp_gen_lim[temp_gen_labels == 1] - config.count_moves + config.epsilon)**5) - 1))
+                -4 * (np.sum(1 / (temp_gen_lim[temp_gen_labels == 1] - config.count_moves + config.epsilon)**5)))
 
-                print(loss_function)        
+                if bot_first:
+                    loss_function = -loss_function
 
-                temp_history = np.delete(temporary_history, len(temporary_history) - 1)
+                print(sing, loss_function)        
+
 
                 if loss_function < minimum_loss:
                     minimum_loss = loss_function

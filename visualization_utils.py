@@ -5,9 +5,6 @@ import numpy as np
 # Source code of Graphic User Interface of this application
 # mainly references from this repo: https://github.com/AlejoG10/python-tictactoe-yt
 
-
-
-
 # constant declaration
 BR_TEXT_COLOR = (62, 117, 224)
 TEXT_COLOR = (152, 149, 133)
@@ -39,7 +36,6 @@ def console_displaying(map):
 def draw_lines(screen):
 	pygame.draw.line(screen, LINE_COLOR, (0, SQUARE_SIZE), (WIDTH, SQUARE_SIZE), LINE_WIDTH)
 	pygame.draw.line(screen, LINE_COLOR, (0, 2 * SQUARE_SIZE), (WIDTH, 2 * SQUARE_SIZE), LINE_WIDTH)
-
 	pygame.draw.line(screen, LINE_COLOR, (SQUARE_SIZE, 0), (SQUARE_SIZE, HEIGHT), LINE_WIDTH)
 	pygame.draw.line(screen, LINE_COLOR, (2 * SQUARE_SIZE, 0), (2 * SQUARE_SIZE, HEIGHT), LINE_WIDTH)
 
