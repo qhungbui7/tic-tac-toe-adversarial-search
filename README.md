@@ -1,1 +1,1 @@
-Artificial Intelligence Fundamentals course's project with improvement in speed of inference stage compared with Minimax Search
+Artificial Intelligence Fundamentals course's project with improvement in speed of inference stage in comparison with with Minimax Search
